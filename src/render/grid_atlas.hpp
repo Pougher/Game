@@ -27,6 +27,12 @@ struct GridAtlas {
 
     // constructor for generating a grid atlas from some already existing,
     // correctly formatted data
+    GridAtlas(int, int, int, int, unsigned char*);
+
+    // creates a new grid atlas from some data, so that you can reuse a grid
+    // atlas object. For all intents and purposes, this is the same as calling
+    // the constructor
+    void create(int, int, int, int, unsigned char*);
 
     // destroys the grid atlas
     void destroy();

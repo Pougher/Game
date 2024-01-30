@@ -81,7 +81,52 @@ GridAtlas::GridAtlas(
         tile_height,
         tile_x * tile_y
     );
+#ifndef NDEBUG
+    rlog::info("Constructed grid atlas from '" + filepath + "'");
+#endif
 
     free(atlas);
     stbi_image_free(data);
+}
+
+GridAtlas::GridAtlas(
+    int tile_width,
+    int tile_height,
+    int tile_x,
+    int tile_y,
+    unsigned char *data) : tile_width(tile_width),
+                           tile_height(tile_height),
+                           tile_x(tile_x),
+                           tile_y(tile_y) {
+    this->array_texture = std::make_unique<ArrayTexture>(
+        data,
+        tile_width,
+        tile_height,
+        tile_x * tile_y
+    );
+}
+
+void GridAtlas::create(
+    int tile_width,
+    int tile_height,
+    int tile_x,
+    int tile_y,
+    unsigned char *data) {
+    this->tile_width = tile_width;
+    this->tile_height = tile_height;
+    this->tile_x = tile_x;
+    this->tile_y = tile_x;
+
+    // create a new array texture
+    this->array_texture = std::make_unique<ArrayTexture>(
+        data,
+        tile_width,
+        tile_height,
+        tile_x * tile_y
+    );
+}
+
+void GridAtlas::destroy() {
+    this->array_texture->destroy();
+    this->array_texture.reset();
 }
