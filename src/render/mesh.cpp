@@ -6,10 +6,13 @@ Mesh::Mesh() {
     // set the last attribute to zero so we dont get undefined indexes into
     // memory
     this->last_attr = 0;
+
+    // set the number of triangles to be drawn to zero
+    this->indices = 0;
 }
 
 template<typename T>
-void Mesh::push(const std::vector<T> &data) {
+void Mesh::push(const std::vector<T> &data, size_t indices) {
     char *end;
     size_t old_size = this->vertices.size();
     bool empty = this->vertices.empty();
@@ -26,12 +29,18 @@ void Mesh::push(const std::vector<T> &data) {
         data.data(),
         data.size() * sizeof(T)
     );
+
+    this->indices += indices;
 }
 
 void Mesh::attribute(const MeshAttribute &attribute) {
     this->attributes.push_back(attribute);
-
     this->last_attr += attribute.size;
+}
+
+void Mesh::render() {
+    glBindVertexArray(this->vao);
+    glDrawArrays(GL_TRIANGLES, 0, this->indices);
 }
 
 void Mesh::build() {
@@ -79,9 +88,10 @@ void *Mesh::last() {
 
 void Mesh::destroy() {
     this->last_attr = 0;
+    this->indices = 0;
 
     glDeleteVertexArrays(1, &this->vao);
     glDeleteBuffers(1, &this->vbo);
 }
 
-template void Mesh::push<float>(const std::vector<float>&);
+template void Mesh::push<float>(const std::vector<float>&, size_t);

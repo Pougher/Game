@@ -2,7 +2,13 @@
 
 using namespace rac;
 
+Window::Window() { /* do nothing */ }
+
 Window::Window(const std::string &name, u32 w, u32 h) {
+    this->create(name, w, h);
+}
+
+void Window::create(const std::string &name, u32 w, u32 h) {
     this->init();
 
     this->window = glfwCreateWindow(w, h, name.c_str(), NULL, NULL);

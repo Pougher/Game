@@ -45,6 +45,9 @@ struct Mesh {
     // mesh attribute is added
     size_t last_attr;
 
+    // number of triangles that OpenGL needs to draw
+    size_t indices;
+
     // vertex attribute object
     u32 vao;
 
@@ -55,15 +58,20 @@ struct Mesh {
     Mesh();
 
     // pushes the vector of data onto the top of the vertices vector, resizing
-    // the vertices data vector as required
+    // the vertices data vector as required. Also increments the indices value
+    // by the integer supplied, signifying the number of additional triangles
+    // that this push requires to be drawn
     template<typename T>
-    void push(const std::vector<T>&);
+    void push(const std::vector<T>&, size_t);
 
     // adds an attribute to the end of the attributes vector
     void attribute(const MeshAttribute&);
 
     // constructs the mesh and provides a VAO and VBO for OpenGL to bind to
     void build();
+
+    // renders the mesh using OpenGL draw calls
+    void render();
 
     // gets the last attribute index as void*
     void *last();

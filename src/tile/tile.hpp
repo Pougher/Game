@@ -11,6 +11,11 @@ enum TileID {
     Grass       = 0,
 };
 
+// holds the state of tiles, each bit represents a different tile attribute
+enum TileState {
+    None        = 0x00000000
+};
+
 struct Tile {
     // the identifier of the tile
     TileID id;

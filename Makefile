@@ -1,7 +1,7 @@
 TARGET ?= main
 SRC_DIRS := ./src
 
-CC = clang++
+CXX = clang++
 
 SRCS := $(shell find $(SRC_DIRS) -name "*.cpp" -or -name "*.c" -or -name "*.s")
 OBJS := $(addsuffix .o,$(basename $(SRCS)))
@@ -31,10 +31,11 @@ else
 	useless := $(info Building for Windows (untested as of now))
 endif
 
-CFLAGS ?= $(INC_FLAGS) -MMD -MP -O3 -Wall -Wextra -Werror -pedantic
+CPPFLAGS := \
+	$(INC_FLAGS) -MMD -MP -O3 -Wall -Wextra -Werror -pedantic -std=c++20
 
 $(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LDLIBS)
+	$(CXX) $(LDFLAGS) $(OBJS) -o $@ $(LDLIBS)
 
 .PHONY: clean, count, linux
 clean:

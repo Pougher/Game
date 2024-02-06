@@ -1,3 +1,5 @@
+#pragma once
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -17,6 +19,13 @@ struct Window {
 
     // creates the window
     Window(const std::string&, u32, u32);
+
+    // empty constructor
+    Window();
+
+    // does the same thing as the window creation constructor, just without
+    // having to be called upon instantiation
+    void create(const std::string&, u32, u32);
 
     // initializes glfw, etc.
     void init();

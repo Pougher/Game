@@ -38,15 +38,17 @@ Texture::Texture(const std::string &filepath) {
 
 Texture::Texture(i32 w, i32 h) {
     // create an empty data array that is completely black
-    unsigned char data[w * h * 4] = { 0 };
+    unsigned char *data = new unsigned char[w * h * 4];
 
     // set up variables for the texture
-    this->width = width;
-    this->height = height;
+    this->width = w;
+    this->height = h;
     this->channels = 4;
 
     // create the empty texture
     this->create_texture_from_data(data);
+
+    free(data);
 }
 
 void Texture::create_texture_from_data(unsigned char *data) {
