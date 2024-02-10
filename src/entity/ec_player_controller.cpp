@@ -12,19 +12,23 @@ void ECPlayerController::tick(Entity *entity) {
     const float speed = 0.2f;
 
     if (glfwGetKey(state->window.window, GLFW_KEY_W) == GLFW_PRESS) {
-        cam->position += speed * cam->front;
+        *cam->position += speed * cam->front;
     }
     if (glfwGetKey(state->window.window, GLFW_KEY_S) == GLFW_PRESS) {
-        cam->position -= speed * cam->front;
+        *cam->position -= speed * cam->front;
     }
     if (glfwGetKey(state->window.window, GLFW_KEY_A) == GLFW_PRESS) {
-        cam->position -=
+        *cam->position -=
             glm::normalize(glm::cross(cam->front, cam->up)) * speed;
     }
     if (glfwGetKey(state->window.window, GLFW_KEY_D) == GLFW_PRESS) {
-        cam->position +=
+        *cam->position +=
             glm::normalize(glm::cross(cam->front, cam->up)) * speed;
     }
+    if (glfwGetKey(state->window.window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        (*cam->position)[1] += 1.0f * speed;
+    if (glfwGetKey(state->window.window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        (*cam->position)[1] -= 1.0f * speed;
 }
 
 void ECPlayerController::init(Entity *entity) { (void) entity; }

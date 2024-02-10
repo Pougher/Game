@@ -32,7 +32,7 @@ else
 endif
 
 CPPFLAGS := \
-	$(INC_FLAGS) -MMD -MP -O3 -Wall -Wextra -Werror -pedantic -std=c++20
+	$(INC_FLAGS) -MMD -MP -O3 -Wall -Wextra -Werror -pedantic -std=c++20 -march=native
 
 $(TARGET): $(OBJS)
 	$(CXX) $(LDFLAGS) $(OBJS) -o $@ $(LDLIBS)

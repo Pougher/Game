@@ -10,8 +10,8 @@
 namespace gfx {
 
 struct Camera {
-    // position of the camera in world space
-    glm::vec3 position;
+    // pointer to the position of the camera in world space
+    glm::vec3 *position;
 
     // front face of the camera
     glm::vec3 front;
@@ -31,7 +31,7 @@ struct Camera {
     f32 pitch;
 
     // simple constructor that sets values for the camera
-    Camera(glm::vec3, glm::vec3, f32 yaw, f32 pitch);
+    Camera(glm::vec3*, glm::vec3, f32, f32);
 
     // constructor that default initializes the vectors of the camera
     Camera();

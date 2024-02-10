@@ -9,11 +9,19 @@
 #include "gfx/camera.hpp"
 
 #include "common/global.hpp"
+#include "common/timer.hpp"
 
 int main() {
     state = new Global;
+    int fps = 0;;
 
     rac::GridAtlas texture(std::string("block_atlas.png"), 16, 16, 16, 16);
+
+    // frame per second timer, counts fps
+    Timer fps_timer(1.0f, [&fps]() {
+        rlog::info("fps = " + std::to_string(fps));
+        fps = 0;
+    });
 
     // chunk test
     level::Chunk chunk;
@@ -40,6 +48,8 @@ int main() {
     gfx::Camera *cam =
         &state->player->get<entity::ECCameraFollow>()->camera;
 
+    glfwSwapInterval(0);
+
     while (!glfwWindowShouldClose(state->window.window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -47,6 +57,8 @@ int main() {
         chunk.solid_mesh.render();
 
         state->update();
+        fps_timer.update();
+        fps++;
     }
 
     state->cleanup();

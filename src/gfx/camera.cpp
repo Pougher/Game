@@ -3,7 +3,7 @@
 using namespace gfx;
 
 Camera::Camera(
-    glm::vec3 position,
+    glm::vec3 *position,
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
     f32 yaw = -90.0f,
     f32 pitch = 0.0f) {
@@ -19,7 +19,7 @@ Camera::Camera(
 
 Camera::Camera() {
     // default initialization
-    this->position = glm::vec3(0.0f);
+    this->position = NULL;
     this->world_up = glm::vec3(0.0f, 1.0f, 0.0f);
     this->yaw = -90.0f;
     this->pitch = 0.0f;
@@ -29,7 +29,11 @@ Camera::Camera() {
 }
 
 glm::mat4 Camera::view_matrix() {
-    return glm::lookAt(this->position, this->position + this->front, this->up);
+    return glm::lookAt(
+        *this->position,
+        *this->position + this->front,
+        this->up
+    );
 }
 
 void Camera::update_vectors() {
