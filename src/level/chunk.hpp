@@ -25,6 +25,9 @@ struct Chunk {
     // constructs the chunks mesh from the tile data
     void mesh();
 
+    // renders the chunk with OpenGL
+    void render();
+
     // deletes all data allocated by the chunk object, involving the
     // destruction of all tiles in the tiles array
     void destroy();

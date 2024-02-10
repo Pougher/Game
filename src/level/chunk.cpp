@@ -56,6 +56,10 @@ void Chunk::mesh() {
     this->solid_mesh.build();
 }
 
+void Chunk::render() {
+    this->solid_mesh.render();
+}
+
 void Chunk::destroy() {
     for (i32 i = 0; i < CHUNK_SIZE_XYZ; i++) {
         for (i32 j = 0; j < CHUNK_SIZE_XYZ; j++) {

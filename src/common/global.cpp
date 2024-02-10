@@ -3,7 +3,7 @@
 // set state equal to null so we can initialize it later
 Global *state = NULL;
 
-Global::Global() {
+Global::Global() : world(12) {
     rlog::info("Instantiated global state object");
 
     // create the window

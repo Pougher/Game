@@ -7,6 +7,9 @@
 #include "timer.hpp"
 
 #include "../render/rac.hpp"
+
+#include "../level/level.hpp"
+
 #include "../entity/ec_manager.hpp"
 #include "../entity/ec_position.hpp"
 #include "../entity/ec_camera_follow.hpp"
@@ -31,6 +34,9 @@ struct Global {
 
     // responsible for ticking the entity manager every 60 TPS
     Timer ec_manager_tick;
+
+    // the world that we are rendering
+    level::Level world;
 
     // initializes all object in the global state
     Global();

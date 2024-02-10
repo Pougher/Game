@@ -73,9 +73,15 @@ void Shader::get_shader_compile_messages(u32 shader, GLenum type) {
     int success;
     char info[512];
 
-    glGetShaderiv(shader, type, &success);
+    if (type == GL_COMPILE_STATUS)
+        glGetShaderiv(shader, type, &success);
+    if (type == GL_LINK_STATUS)
+        glGetProgramiv(shader, type, &success);
     if (!success) {
-        glGetShaderInfoLog(shader, 512, NULL, info);
+        if (type == GL_LINK_STATUS)
+            glGetProgramInfoLog(shader, 512, NULL, info);
+        if (type == GL_COMPILE_STATUS)
+            glGetShaderInfoLog(shader, 512, NULL, info);
         rlog::error("Issue compiling shader: " + std::string(info));
 
         this->compilation_failure = true;

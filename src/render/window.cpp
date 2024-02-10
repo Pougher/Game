@@ -25,7 +25,9 @@ void Window::create(const std::string &name, u32 w, u32 h) {
 
     this->init_glew();
 
+#ifndef __APPLE__
     glViewport(0, 0, w, h);
+#endif
 }
 
 void Window::init() {
