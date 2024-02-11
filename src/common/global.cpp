@@ -3,7 +3,7 @@
 // set state equal to null so we can initialize it later
 Global *state = NULL;
 
-Global::Global() : world(12) {
+Global::Global() : world(1) {
     rlog::info("Instantiated global state object");
 
     // create the window
@@ -11,10 +11,18 @@ Global::Global() : world(12) {
     rlog::info("Created 1280x720 window");
 
     // add the default rendering shaders
-    this->add_shaders({
-        "shaders/default_vs.glsl",
-        "shaders/default_fs.glsl"
-    });
+    this->add_shaders(
+        {
+            "default",
+            "chunk"
+        },
+        {
+            "shaders/default_vs.glsl",
+            "shaders/default_fs.glsl",
+            "shaders/chunk_vs.glsl",
+            "shaders/chunk_fs.glsl"
+        }
+    );
 
     // create the player entity
     this->player = this->ec_manager.instantiate_entity({
@@ -30,9 +38,14 @@ Global::Global() : world(12) {
         state->ec_manager.tick();
     };
     rlog::info("Created entity component system tick interval timer");
+
+    rlog::info("Generating world...");
+    state->world.generate();
 }
 
-void Global::add_shaders(const std::vector<std::string> &files) {
+void Global::add_shaders(
+    const std::vector<std::string> &names,
+    const std::vector<std::string> &files) {
     // if we loaded an odd number of files then we wouldn't have a pair of
     // fragment and vertex shaders
     assert(files.size() % 2 == 0 && "Number of shaders to load must be"
@@ -40,7 +53,9 @@ void Global::add_shaders(const std::vector<std::string> &files) {
 
     // load the shaders
     for (size_t i = 0; i < files.size(); i += 2) {
-        this->shaders.push_back(rac::Shader(files[i], files[i + 1], true));
+        this->shaders[
+            names[i / 2]] =
+            rac::Shader(files[i], files[i + 1], true);
     }
 }
 
@@ -62,8 +77,15 @@ void Global::cleanup() {
     // destroy all entities
     this->ec_manager.cleanup();
 
+    // remove data allocated by the loaded level
+    this->world.destroy();
+
+    // clean up all of the data allocated to storing tile information
+    this->tile_manager.destroy();
+
     // clean up shaders
-    for (rac::Shader &shader : this->shaders) {
+    for (auto &[name, shader] : this->shaders) {
+        rlog::info("Destroying shader '" + name + "'");
         shader.destroy();
     }
 }

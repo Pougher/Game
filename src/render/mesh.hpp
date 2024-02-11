@@ -71,10 +71,10 @@ struct Mesh {
     void build();
 
     // renders the mesh using OpenGL draw calls
-    void render();
+    void render() const;
 
     // gets the last attribute index as void*
-    void *last();
+    void *last() const;
 
     // destroys all data held by the mesh
     void destroy();

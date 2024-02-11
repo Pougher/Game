@@ -4,7 +4,6 @@ in vec2 texcoord;
 
 uniform sampler2DArray tex;
 
-void main()
-{
+void main() {
     FragColor = texture(tex, vec3(texcoord, 243));
 }

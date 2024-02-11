@@ -6,6 +6,8 @@
 #include "log.hpp"
 #include "timer.hpp"
 
+#include "../tile/tile_manager.hpp"
+
 #include "../render/rac.hpp"
 
 #include "../level/level.hpp"
@@ -24,9 +26,9 @@ struct Global {
     entity::ECManager ec_manager;
 
     // list of shaders for global use
-    std::vector<rac::Shader> shaders;
+    std::unordered_map<std::string, rac::Shader> shaders;
 
-    // list of textures that are loaded (global)
+    // map of textures that are used
     std::vector<rac::Texture> textures;
 
     // the player's entity reference
@@ -34,6 +36,9 @@ struct Global {
 
     // responsible for ticking the entity manager every 60 TPS
     Timer ec_manager_tick;
+
+    // stores information about tiles such as their behavior etc.
+    TileManager tile_manager;
 
     // the world that we are rendering
     level::Level world;
@@ -44,7 +49,10 @@ struct Global {
     // loads shaders to the global state where every even numbered string is
     // a vertex shader position, and each odd numbered string is a fragment
     // shader position
-    void add_shaders(const std::vector<std::string>&);
+    void add_shaders(
+        const std::vector<std::string>&,
+        const std::vector<std::string>&
+    );
 
     // runs update methods on a per frame basis for all components of the
     // global state

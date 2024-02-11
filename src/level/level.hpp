@@ -27,7 +27,7 @@ struct Level {
     void render();
 
     // destroys all data allocated by the world
-    void cleanup();
+    void destroy();
 };
 
 }

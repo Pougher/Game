@@ -1,10 +1,14 @@
 #include "tile_manager.hpp"
+#include <iostream>
 
 TileManager::TileManager() {
-    this->tiles.resize(TILE_MANAGER_TILE_CAP);
+    this->tiles = new TileInfo[TILE_MANAGER_TILE_CAP];
+
+    REGISTER_TILE(grass);
+    REGISTER_TILE(air);
 }
 
-void TileManager::register_tile(TileID id, const TileInfo &tile) {
+void TileManager::register_tile(TileID id, const TileInfo& tile) {
     // inserts a tile at the specified tile location
     this->tiles[id] = tile;
 }
@@ -29,4 +33,12 @@ void TileManager::register_default_tile(
 
 TileInfo& TileManager::get(TileID tile) {
     return this->tiles[tile];
+}
+
+bool TileManager::get_transparent(TileID tile) {
+    return this->tiles[tile].transparent;
+}
+
+void TileManager::destroy() {
+    delete[] this->tiles;
 }

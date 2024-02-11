@@ -8,7 +8,7 @@
 
 struct TileManager {
     // vector containing the tiles that we are using
-    std::vector<TileInfo> tiles;
+    TileInfo *tiles;
 
     // simple constructor that reserves TILE_CAP number of spaces in the tiles
     // vector
@@ -23,4 +23,16 @@ struct TileManager {
 
     // returns a reference to a TileID object
     TileInfo& get(TileID);
+
+    // gets the transparency attribute of a specific tile ID
+    bool get_transparent(TileID);
+
+    // cleans up allocated data in the tile manager
+    void destroy();
 };
+
+// register a tile to the tile manager
+#define REGISTER_TILE(name) \
+    extern void tile_##name##_register(TileManager*); \
+    tile_##name##_register(this)
+

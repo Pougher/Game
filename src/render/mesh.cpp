@@ -38,7 +38,7 @@ void Mesh::attribute(const MeshAttribute &attribute) {
     this->last_attr += attribute.size;
 }
 
-void Mesh::render() {
+void Mesh::render() const {
     glBindVertexArray(this->vao);
     glDrawArrays(GL_TRIANGLES, 0, this->indices);
 }
@@ -82,7 +82,7 @@ void Mesh::build() {
     glBindVertexArray(0);
 }
 
-void *Mesh::last() {
+void *Mesh::last() const {
     return (void*)this->last_attr;
 }
 

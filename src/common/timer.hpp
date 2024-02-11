@@ -5,6 +5,7 @@
 
 #include <functional>
 #include <iostream>
+#include <cmath>
 
 #include "types.hpp"
 
@@ -14,6 +15,9 @@ struct Timer {
 
     // previous time that the timer was checked for updates
     f64 last_time;
+
+    // the accumulation of timer misses
+    f64 accumulation;
 
     // the method that is called when the appropriate amount of time has passed
     // (only called if update() is called after the interval milliseconds)

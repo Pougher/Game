@@ -9,6 +9,7 @@
 // enum to hold the different types of block
 enum TileID {
     Grass       = 0,
+    Air         = 1,
 };
 
 // holds the state of tiles, each bit represents a different tile attribute
