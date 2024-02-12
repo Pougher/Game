@@ -1,4 +1,5 @@
 #include "timer.hpp"
+#include "global.hpp"
 
 Timer::Timer () {
     this->last_time = glfwGetTime();
@@ -12,6 +13,9 @@ Timer::Timer(f64 interval, const std::function<void()> &method) :
 
 void Timer::update() {
     if (glfwGetTime() >= (this->last_time + this->interval)) {
+        // only accumulate time if FPS is below 60
+        if (state->fps < 60) {
+
         // accumulate all of the missed updates that may have occured and then
         // once they have accumulated to more than one interval, execute that
         // interval the number of times it has been missed plus one
@@ -28,6 +32,9 @@ void Timer::update() {
         // call the function as many times as intervals have missed to
         // synchronise everything
         for (i32 i = 0; i < intervals; i++) {
+            this->method();
+        }
+        } else {
             this->method();
         }
         this->last_time = glfwGetTime();

@@ -10,7 +10,7 @@ void tile_air_register(TileManager *tm) {
             { LEFT, 0 },
             { RIGHT, 0 },
             { BACK, 0 },
-            { FORWARD, 0 },
+            { FRONT, 0 },
         }
     };
 

@@ -14,5 +14,5 @@ enum Direction {
     LEFT    = 2,
     RIGHT   = 3,
     BACK    = 4,
-    FORWARD = 5
+    FRONT   = 5
 };

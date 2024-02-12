@@ -5,12 +5,12 @@ void tile_grass_register(TileManager *tm) {
         .transparent = false,
         .fluid = false,
         .faces = {
-            { UP, 240 },
-            { DOWN, 240 },
-            { LEFT, 240 },
-            { RIGHT, 240 },
-            { BACK, 240 },
-            { FORWARD, 240 },
+            { UP, 2 },
+            { DOWN, 0 },
+            { LEFT, 1 },
+            { RIGHT, 1 },
+            { BACK, 1 },
+            { FRONT, 1 },
         }
     };
 

@@ -43,6 +43,9 @@ struct Global {
     // the world that we are rendering
     level::Level world;
 
+    // current fps that the game is operating at
+    i32 fps;
+
     // initializes all object in the global state
     Global();
 

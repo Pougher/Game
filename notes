@@ -1,7 +1,0 @@
-- Each vertex for a chunk is stored in a compressed format to save on VRAM:
-    X        Y        Z   Texture ID  light    index
-(5 bits) (5 bits) (5 bits) (12 bits) (3 bits) (2 bits)
-XXXXXYYYYYZZZZZTTTTTTTTTTTTLLLII
-
-
-Before using the vertex compression format: 159mb - 137mb = 22mb of VRAM

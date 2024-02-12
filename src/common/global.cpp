@@ -3,11 +3,11 @@
 // set state equal to null so we can initialize it later
 Global *state = NULL;
 
-Global::Global() : world(1) {
+Global::Global() : world(8) {
     rlog::info("Instantiated global state object");
 
     // create the window
-    this->window.create("DEV-0e-04_02_2024", 1280, 720);
+    this->window.create("DEV-0f-12_02_2024", 1280, 720);
     rlog::info("Created 1280x720 window");
 
     // add the default rendering shaders
@@ -40,7 +40,10 @@ Global::Global() : world(1) {
     rlog::info("Created entity component system tick interval timer");
 
     rlog::info("Generating world...");
-    state->world.generate();
+    this->world.generate();
+
+    this->fps = 120;
+    rlog::info("Done setting everything up");
 }
 
 void Global::add_shaders(

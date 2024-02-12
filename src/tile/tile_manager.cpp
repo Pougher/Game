@@ -6,6 +6,7 @@ TileManager::TileManager() {
 
     REGISTER_TILE(grass);
     REGISTER_TILE(air);
+    REGISTER_TILE(dirt);
 }
 
 void TileManager::register_tile(TileID id, const TileInfo& tile) {
@@ -27,7 +28,7 @@ void TileManager::register_default_tile(
         { LEFT,     texture },
         { RIGHT,    texture },
         { BACK,     texture },
-        { FORWARD,  texture }
+        { FRONT,    texture }
     };
 }
 

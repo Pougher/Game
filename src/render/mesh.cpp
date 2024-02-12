@@ -95,3 +95,4 @@ void Mesh::destroy() {
 }
 
 template void Mesh::push<float>(const std::vector<float>&, size_t);
+template void Mesh::push<u32>(const std::vector<u32>&, size_t);
