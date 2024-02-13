@@ -42,7 +42,7 @@ clean:
 	$(RM) $(TARGET) $(OBJS) $(DEPS)
 
 count:
-	tokei src/ --exclude "stb_image.h" --exclude "open_simplex_noise.hpp"
+	tokei src/ --exclude "stb_image.h" --exclude "open_simplex_noise.hpp" --exclude "open_simplex_noise.cpp"
 
 print-%  : ; @echo $* = $($*)
 

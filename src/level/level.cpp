@@ -3,19 +3,30 @@
 
 using namespace level;
 
-Level::Level(u32 vd) : view_distance(vd) {
-    this->loaded_chunks = new Chunk **[vd];
-    for (u32 i = 0; i < vd; i++) {
-        this->loaded_chunks[i] = new Chunk*[vd];
-        for (u32 j = 0; j < vd; j++) {
+Level::Level(u32 vd, const std::vector<GeneratorPass*> &passes)
+    : corner_x(0),
+      corner_y(0),
+      view_distance(vd) {
+    this->init_chunks();
+    this->level_generator.set_passes(passes);
+}
+
+Level::Level(u32 vd) : corner_x(0),
+                       corner_y(0),
+                       view_distance(vd) {
+    this->init_chunks();
+}
+
+void Level::init_chunks() {
+    this->loaded_chunks = new Chunk **[this->view_distance];
+    for (u32 i = 0; i < this->view_distance; i++) {
+        this->loaded_chunks[i] = new Chunk*[this->view_distance];
+        for (u32 j = 0; j < this->view_distance; j++) {
             this->loaded_chunks[i][j] = new Chunk;
             this->loaded_chunks[i][j]->x = i * CHUNK_SIZE_XZ;
             this->loaded_chunks[i][j]->y = j * CHUNK_SIZE_XZ;
         }
     }
-
-    this->corner_x = 0;
-    this->corner_y = 0;
 }
 
 void Level::render() {
@@ -48,7 +59,7 @@ TileID Level::get_level_tile_id(i64 cx, i64 cy, u32 x, u32 y, u32 z) {
 void Level::generate() {
     for (u32 i = 0; i < this->view_distance; i++) {
         for (u32 j = 0; j < this->view_distance; j++) {
-            this->loaded_chunks[i][j]->generate();
+            this->level_generator.run(this->loaded_chunks[i][j]);
         }
     }
 }
@@ -166,4 +177,8 @@ void Level::destroy() {
         delete[] this->loaded_chunks[i];
     }
     delete[] this->loaded_chunks;
+
+    for (const auto &pass : this->level_generator.passes) {
+        delete pass;
+    }
 }

@@ -8,12 +8,14 @@
 #include "../common/types.hpp"
 
 #include "chunk.hpp"
+#include "generator.hpp"
+#include "generator_pass.hpp"
 
 namespace level {
 
 struct Level {
-    // the squared view distance of the player (must be an odd number)
-    u32 view_distance;
+    // responsible for providing generation to the chunks
+    Generator level_generator;
 
     // a 2D array of the currently loaded chunk pointers
     Chunk ***loaded_chunks;
@@ -22,8 +24,18 @@ struct Level {
     i64 corner_x;
     i64 corner_y;
 
-    // constructor to set the view distance
+    // the squared view distance of the player (must be an odd number)
+    u32 view_distance;
+
+    // constructor to set the view distance and the level generator
+    Level(u32, const std::vector<GeneratorPass*>&);
+
+    // constructor that just sets the view distance
     Level(u32);
+
+    // initializes the chunk array to empty chunks with their x and y parameters
+    // filled
+    void init_chunks();
 
     // gets a level's tile ID from its chunk coordinates and its local tile
     // coordinates

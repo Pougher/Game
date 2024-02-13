@@ -10,7 +10,8 @@
 enum TileID {
     Grass       = 0,
     Air         = 1,
-    Dirt        = 2
+    Dirt        = 2,
+    Sand        = 3
 };
 
 // holds the state of tiles, each bit represents a different tile attribute

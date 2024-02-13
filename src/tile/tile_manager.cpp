@@ -7,6 +7,7 @@ TileManager::TileManager() {
     REGISTER_TILE(grass);
     REGISTER_TILE(air);
     REGISTER_TILE(dirt);
+    REGISTER_TILE(sand);
 }
 
 void TileManager::register_tile(TileID id, const TileInfo& tile) {

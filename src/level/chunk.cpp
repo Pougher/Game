@@ -32,17 +32,17 @@ Chunk::Chunk() {
 }
 
 void Chunk::generate() {
-    OSN::Noise<2> noise;
+    OpenSimplexNoise::Noise noise(69.0f);
 
     for (u32 x = 0; x < CHUNK_SIZE_XZ; x++) {
         for (u32 z = 0; z < CHUNK_SIZE_XZ; z++) {
-            float noise_x = (static_cast<float>(x + this->x) / 16.0f);
-            float noise_z = (static_cast<float>(z + this->y) / 16.0f);
+            float noise_x = (static_cast<f64>(x + this->x) / 16.0f);
+            float noise_z = (static_cast<f64>(z + this->y) / 16.0f);
 
-            float value = noise.eval(noise_x, noise_z);
+            f64 value = noise.eval(noise_x, noise_z);
             u32 height = static_cast<u32>(((value + 1) / 2) * CHUNK_SIZE_XZ);
             for (u32 y = 0; y < CHUNK_SIZE_Y; y++) {
-                if (y == height) this->tiles[x][y][z].id = TileID::Grass;
+                if (y == height) this->tiles[x][y][z].id = TileID::Sand;
                 if (y < height) this->tiles[x][y][z].id = TileID::Dirt;
             }
         }

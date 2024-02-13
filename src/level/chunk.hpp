@@ -8,6 +8,8 @@
 
 #include "../tile/tile.hpp"
 
+#include "../common/open_simplex_noise.hpp"
+
 #define CHUNK_SIZE_XZ 32
 #define CHUNK_SIZE_Y 256
 

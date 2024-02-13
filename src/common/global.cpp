@@ -7,7 +7,7 @@ Global::Global() : world(8) {
     rlog::info("Instantiated global state object");
 
     // create the window
-    this->window.create("DEV-0f-12_02_2024", 1280, 720);
+    this->window.create("DEV-0g-13_02_2024", 1280, 720);
     rlog::info("Created 1280x720 window");
 
     // add the default rendering shaders
@@ -40,6 +40,9 @@ Global::Global() : world(8) {
     rlog::info("Created entity component system tick interval timer");
 
     rlog::info("Generating world...");
+    this->world.level_generator.set_passes({
+        new level::TerrainPass
+    });
     this->world.generate();
 
     this->fps = 120;
