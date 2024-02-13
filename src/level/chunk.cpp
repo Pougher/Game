@@ -59,17 +59,17 @@ void Chunk::mesh() {
 
                 u8 adjacent = this->adjacency_test(x, y, z);
                 if (adjacent & 0x01)
-                    this->add_cube_left(x, y, z, info.faces[LEFT], 0x3f);
+                    this->add_cube_left(x, y, z, info.faces[LEFT], 0x2a);
                 if (adjacent & 0x02)
                     this->add_cube_right(x, y, z, info.faces[RIGHT], 0x2a);
                 if (adjacent & 0x04)
-                    this->add_cube_bottom(x, y, z, info.faces[DOWN], 0x3f);
+                    this->add_cube_bottom(x, y, z, info.faces[DOWN], 0x15);
                 if (adjacent & 0x08)
                     this->add_cube_top(x, y, z, info.faces[UP], 0x3f);
                 if (adjacent & 0x10)
-                    this->add_cube_back(x, y, z, info.faces[BACK], 0x15);
+                    this->add_cube_back(x, y, z, info.faces[BACK], 0x2a);
                 if (adjacent & 0x20)
-                    this->add_cube_front(x, y, z, info.faces[FRONT], 0x3f);
+                    this->add_cube_front(x, y, z, info.faces[FRONT], 0x2a);
             }
         }
     }
@@ -210,6 +210,7 @@ void Chunk::add_cube_right(u32 x, u32 y, u32 z, u32 t, u8 l) {
 }
 
 void Chunk::destroy() {
+    this->solid_mesh.destroy();
     for (i32 i = 0; i < CHUNK_SIZE_XZ; i++) {
         for (i32 j = 0; j < CHUNK_SIZE_Y; j++) {
             delete[] this->tiles[i][j];

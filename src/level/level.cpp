@@ -64,27 +64,8 @@ void Level::mesh() {
 void Level::move(i64 x, i64 y) {
     Chunk **old = new Chunk*[this->view_distance * this->view_distance];
 
-    // first, find all of the edge chunks (so we can update them later if
-    // we need to)
-    // this is because when the level moves, the chunks on the edge with
-    // holes in their mesh (due to being on the edge) need to be updated
-    // if they move to be no longer on the edge otherwise the level might look
-    // like it has random holes everywhere
-    std::vector<Chunk*> mesh_update_chunks;
-
-    for (u32 i = 0; i < this->view_distance; i++) {
-        for (u32 j = 0; j < this->view_distance; j++) {
-            Chunk *c = this->loaded_chunks[i][j];
-            if (c->x == this->corner_x || c->x ==
-                this->corner_x + (this->view_distance - 1) * CHUNK_SIZE_XZ ||
-                c->y == this->corner_y || c->y ==
-                this->corner_y + (this->view_distance - 1) * CHUNK_SIZE_XZ) {
-                // chunk is an edge chunk, and so if it moves then it needs to
-                // be remeshed
-                mesh_update_chunks.push_back(c);
-            }
-        }
-    }
+    // some of the edge chunks might need to be updated
+    std::vector<Chunk*> mesh_update_chunks = this->get_edge_chunks();
 
     this->corner_x = x;
     this->corner_y = y;
@@ -118,6 +99,9 @@ void Level::move(i64 x, i64 y) {
                 this->loaded_chunks[index_x][index_y] = c;
                 continue;
             }
+
+            // if the chunk that is being deleted is in our mesh_update_chunks
+            // vector, then we need to erase it
             mesh_update_chunks.erase(
                 std::remove(
                     mesh_update_chunks.begin(),
@@ -125,6 +109,8 @@ void Level::move(i64 x, i64 y) {
                     c
                 ), mesh_update_chunks.end()
             );
+
+            c->destroy();
             delete c;
         }
     }
@@ -151,6 +137,24 @@ void Level::move(i64 x, i64 y) {
     }
 
     delete[] old;
+}
+
+std::vector<Chunk*> Level::get_edge_chunks() {
+    std::vector<Chunk*> edges;
+
+    for (u32 i = 0; i < this->view_distance; i++) {
+        for (u32 j = 0; j < this->view_distance; j++) {
+            Chunk *c = this->loaded_chunks[i][j];
+            if (c->x == this->corner_x || c->x ==
+                this->corner_x + (this->view_distance - 1) * CHUNK_SIZE_XZ ||
+                c->y == this->corner_y || c->y ==
+                this->corner_y + (this->view_distance - 1) * CHUNK_SIZE_XZ) {
+                edges.push_back(c);
+            }
+        }
+    }
+
+    return edges;
 }
 
 void Level::destroy() {

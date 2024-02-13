@@ -43,6 +43,9 @@ struct Level {
     // be loaded, preserves chunks that remain loaded
     void move(i64, i64);
 
+    // gets the chunks on the edge of the world
+    std::vector<Chunk*> get_edge_chunks();
+
     // destroys all data allocated by the world
     void destroy();
 };
