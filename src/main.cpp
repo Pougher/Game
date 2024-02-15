@@ -87,6 +87,11 @@ int main() {
     glfwSetCursorPosCallback(state->window.window, mouse_callback);
     glfwSetInputMode(state->window.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+    //glEnable(GL_CULL_FACE);
+   //glCullFace(GL_FRONT);
+    //
+    Timer t(1.0f, []{state->world.move(state->world.corner_x + 32, 0);});
+
     while (!glfwWindowShouldClose(state->window.window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -101,6 +106,7 @@ int main() {
 
         if (glfwGetKey(state->window.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             break;
+        t.update();
     }
 
     state->cleanup();

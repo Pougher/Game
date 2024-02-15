@@ -65,11 +65,11 @@ void Mesh::build() {
 
     size_t attribute = 0;
     for (const MeshAttribute &attr : this->attributes) {
-        glVertexAttribPointer(
+        glVertexAttribIPointer(
             attribute,
             attr.length,
             attr.type,
-            GL_FALSE,
+            //GL_FALSE,
             this->last_attr,
             attr.index
         );

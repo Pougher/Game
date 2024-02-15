@@ -35,8 +35,8 @@ void Level::render() {
             state->shaders["chunk"].set_vec2(
                 "chunk_pos",
                 glm::vec2(
-                    i * CHUNK_SIZE_XZ + this->corner_x,
-                    j * CHUNK_SIZE_XZ + this->corner_y
+                    i * CHUNK_SIZE_XZ,
+                    j * CHUNK_SIZE_XZ
                 )
             );
             this->loaded_chunks[i][j]->render();
@@ -136,7 +136,7 @@ void Level::move(i64 x, i64 y) {
                 this->loaded_chunks[i][j]->y =
                     j * CHUNK_SIZE_XZ + this->corner_y;
 
-                this->loaded_chunks[i][j]->generate();
+                this->level_generator.run(this->loaded_chunks[i][j]);
                 mesh_update_chunks.push_back(this->loaded_chunks[i][j]);
             }
         }
