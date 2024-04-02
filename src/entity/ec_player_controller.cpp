@@ -9,6 +9,14 @@ using namespace entity;
 
 void ECPlayerController::tick(Entity *entity) {
     gfx::Camera *cam = &entity->get<ECCameraFollow>()->camera;
+
+    // if the player has moved chunks, move the world
+    if (*(this->chunk_pos) != this->old_chunk_pos) {
+        this->old_chunk_pos = *(this->chunk_pos);
+        //state->world.move(this->old_chunk_pos.x * 32, this->old_chunk_pos.y * 32);
+        //state->world.move(state->world.corner_x + 32, state->world.corner_y);
+    }
+
     const float speed = 0.2f;
 
     if (glfwGetKey(state->window.window, GLFW_KEY_W) == GLFW_PRESS) {
@@ -31,5 +39,7 @@ void ECPlayerController::tick(Entity *entity) {
         (*cam->position)[1] -= 1.0f * speed;
 }
 
-void ECPlayerController::init(Entity *entity) { (void) entity; }
+void ECPlayerController::init(Entity *entity) {
+    this->chunk_pos = &entity->get<ECPosition>()->chunk_pos;
+}
 void ECPlayerController::update(Entity *entity) { (void) entity; }

@@ -54,6 +54,10 @@ struct Mesh {
     // vertex buffer object
     u32 vbo;
 
+    // if the mesh has already been built, this is set to true. Otherwise, it
+    // is left as false.
+    bool meshed;
+
     // initializes attributes of the mesh
     Mesh();
 
@@ -75,6 +79,10 @@ struct Mesh {
 
     // gets the last attribute index as void*
     void *last() const;
+
+    // resets the meshes vertices vector, along with the number of indices
+    // within the mesh
+    void reset();
 
     // destroys all data held by the mesh
     void destroy();

@@ -50,6 +50,9 @@ void Chunk::generate() {
 }
 
 void Chunk::mesh() {
+    // reset the chunks mesh to prevent issues when remeshing
+    this->solid_mesh.reset();
+
     for (u32 x = 0; x < CHUNK_SIZE_XZ; x++) {
         for (u32 y = 0; y < CHUNK_SIZE_Y; y++) {
             for (u32 z = 0; z < CHUNK_SIZE_XZ; z++) {

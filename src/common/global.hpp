@@ -12,6 +12,7 @@
 
 #include "../level/level.hpp"
 #include "../level/terrain_pass.hpp"
+#include "../level/ocean_pass.hpp"
 
 #include "../entity/ec_manager.hpp"
 #include "../entity/ec_position.hpp"

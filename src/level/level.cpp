@@ -23,22 +23,28 @@ void Level::init_chunks() {
         this->loaded_chunks[i] = new Chunk*[this->view_distance];
         for (u32 j = 0; j < this->view_distance; j++) {
             this->loaded_chunks[i][j] = new Chunk;
-            this->loaded_chunks[i][j]->x = i * CHUNK_SIZE_XZ;
-            this->loaded_chunks[i][j]->y = j * CHUNK_SIZE_XZ;
+            this->loaded_chunks[i][j]->x = i * CHUNK_SIZE_XZ + this->corner_x;
+            this->loaded_chunks[i][j]->y = j * CHUNK_SIZE_XZ + this->corner_y;
         }
     }
 }
 
 void Level::render() {
     for (u32 i = 0; i < this->view_distance; i++) {
-            for (u32 j = 0; j < this->view_distance; j++) {
+        for (u32 j = 0; j < this->view_distance; j++) {
             state->shaders["chunk"].set_vec2(
                 "chunk_pos",
                 glm::vec2(
+<<<<<<< HEAD
                     i * CHUNK_SIZE_XZ,
                     j * CHUNK_SIZE_XZ
+=======
+                    i * CHUNK_SIZE_XZ/* + this->corner_x*/,
+                    j * CHUNK_SIZE_XZ/* + this->corner_y*/
+>>>>>>> 5c7ce4b (Fixed stupid OpenGL mistake in mesh)
                 )
             );
+
             this->loaded_chunks[i][j]->render();
         }
     }
@@ -81,7 +87,7 @@ void Level::move(i64 x, i64 y) {
     this->corner_x = x;
     this->corner_y = y;
 
-    // copy data into old
+    // copy all chunk pointers into old
     for (u32 i = 0; i < this->view_distance; i++) {
         std::memcpy(
             (char*)old + i * sizeof(Chunk*) * this->view_distance,
@@ -95,6 +101,8 @@ void Level::move(i64 x, i64 y) {
         );
     }
 
+    // check if a chunk remains in bounds, placing it at the correct index into
+    // the chunk array if it does
     for (u32 i = 0; i < this->view_distance; i++) {
         for (u32 j = 0; j < this->view_distance; j++) {
             Chunk *c = old[j + i * this->view_distance];
@@ -121,12 +129,14 @@ void Level::move(i64 x, i64 y) {
                 ), mesh_update_chunks.end()
             );
 
+            // delete all data allocated to the chunk
             c->destroy();
             delete c;
         }
     }
 
-    // fill in all of the deleted chunks
+    // fill in all of the deleted chunks with new chunks at the correct
+    // coordinates
     for (u32 i = 0; i < this->view_distance; i++) {
         for (u32 j = 0; j < this->view_distance; j++) {
             if (this->loaded_chunks[i][j] == NULL) {
@@ -142,7 +152,7 @@ void Level::move(i64 x, i64 y) {
         }
     }
 
-    // remesh all of the chunks that require it
+    // mesh all of the chunks that require it
     for (const auto &c : mesh_update_chunks) {
         c->mesh();
     }

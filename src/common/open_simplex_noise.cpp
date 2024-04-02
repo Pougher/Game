@@ -73,6 +73,29 @@ namespace OpenSimplexNoise
     }
   }
 
+  void Noise::set_seed(int64_t seed) {
+    short source[256];
+    for (short i = 0; i < 256; i++)
+    {
+      source[i] = i;
+    }
+    seed = seed * 6364136223846793005l + 1442695040888963407l;
+    seed = seed * 6364136223846793005l + 1442695040888963407l;
+    seed = seed * 6364136223846793005l + 1442695040888963407l;
+    for (int i = 255; i >= 0; i--)
+    {
+      seed = seed * 6364136223846793005l + 1442695040888963407l;
+      int r = static_cast<int>((seed + 31) % (i + 1));
+      if (r < 0)
+      {
+        r += (i + 1);
+      }
+      m_perm[i] = source[r];
+      m_permGradIndex3d[i] = static_cast<short>((m_perm[i] % (m_gradients3d.size() / 3)) * 3);
+      source[r] = source[i];
+    }
+  }
+
   double Noise::eval(double x,  double y) const
   {
     //Place input coordinates onto grid.

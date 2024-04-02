@@ -3,7 +3,7 @@
 // set state equal to null so we can initialize it later
 Global *state = NULL;
 
-Global::Global() : world(8) {
+Global::Global() : world(16) {
     rlog::info("Instantiated global state object");
 
     // create the window
@@ -41,6 +41,7 @@ Global::Global() : world(8) {
 
     rlog::info("Generating world...");
     this->world.level_generator.set_passes({
+    //    new level::OceanPass,
         new level::TerrainPass
     });
     this->world.generate();

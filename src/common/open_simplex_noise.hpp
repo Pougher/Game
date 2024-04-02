@@ -16,6 +16,10 @@ namespace OpenSimplexNoise
   public:
     Noise();
     Noise(int64_t seed);
+
+    // added function for setting the seed of the noise
+    void set_seed(int64_t s);
+
     //2D Open Simplex Noise.
     double eval(const double x, const double y) const;
     //3D Open Simplex Noise.

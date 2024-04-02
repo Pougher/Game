@@ -8,6 +8,8 @@ TileManager::TileManager() {
     REGISTER_TILE(air);
     REGISTER_TILE(dirt);
     REGISTER_TILE(sand);
+    REGISTER_TILE(water);
+    REGISTER_TILE(limestone);
 }
 
 void TileManager::register_tile(TileID id, const TileInfo& tile) {

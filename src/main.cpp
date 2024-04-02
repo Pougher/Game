@@ -67,7 +67,7 @@ int main() {
     state->shaders["chunk"].set_mat4("projection",
        glm::perspective(glm::radians(90.0f), 1280.0f / 720.0f, 0.1f, 10000.0f));
     //state->shaders["chunk"].set_mat4("projection",
-    //    glm::ortho(8 * -(1280.0f / 720.0f), 8 * (1280.0f / 720.0f), -8.0f,8.0f, 0.1f, 100.0f));
+    //    glm::ortho(8 * -(1280.0f / 720.0f), 8 * (1280.0f / 720.0f), -8.0f,8.0f, 0.1f, 10000.0f));
     state->shaders["chunk"].set_int("tex", 0);
 
     // get stuff into isometric view
@@ -82,15 +82,17 @@ int main() {
 
     cam = &state->player->get<entity::ECCameraFollow>()->camera;
 
-    glfwSwapInterval(0);
-
     glfwSetCursorPosCallback(state->window.window, mouse_callback);
     glfwSetInputMode(state->window.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+<<<<<<< HEAD
     //glEnable(GL_CULL_FACE);
    //glCullFace(GL_FRONT);
     //
     Timer t(1.0f, []{state->world.move(state->world.corner_x + 32, 0);});
+=======
+    Timer t(0.05f, []{state->world.move(state->world.corner_x + CHUNK_SIZE_XZ, 0);});
+>>>>>>> 5c7ce4b (Fixed stupid OpenGL mistake in mesh)
 
     while (!glfwWindowShouldClose(state->window.window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -102,6 +104,7 @@ int main() {
         state->update();
 
         fps_timer.update();
+        t.update();
         fps++;
 
         if (glfwGetKey(state->window.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
