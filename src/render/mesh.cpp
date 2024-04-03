@@ -70,16 +70,6 @@ void Mesh::build() {
 
     size_t attribute = 0;
     for (const MeshAttribute &attr : this->attributes) {
-<<<<<<< HEAD
-        glVertexAttribIPointer(
-            attribute,
-            attr.length,
-            attr.type,
-            //GL_FALSE,
-            this->last_attr,
-            attr.index
-        );
-=======
         if (attr.type == GL_UNSIGNED_INT || attr.type == GL_INT ||
             attr.type == GL_SHORT || attr.type == GL_UNSIGNED_SHORT ||
             attr.type == GL_BYTE || attr.type == GL_UNSIGNED_BYTE) {
@@ -108,7 +98,6 @@ void Mesh::build() {
                 attr.index
             );
         }
->>>>>>> 5c7ce4b (Fixed stupid OpenGL mistake in mesh)
         glEnableVertexAttribArray(attribute);
 
         attribute++;

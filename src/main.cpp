@@ -85,14 +85,7 @@ int main() {
     glfwSetCursorPosCallback(state->window.window, mouse_callback);
     glfwSetInputMode(state->window.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-<<<<<<< HEAD
-    //glEnable(GL_CULL_FACE);
-   //glCullFace(GL_FRONT);
-    //
-    Timer t(1.0f, []{state->world.move(state->world.corner_x + 32, 0);});
-=======
     Timer t(0.05f, []{state->world.move(state->world.corner_x + CHUNK_SIZE_XZ, 0);});
->>>>>>> 5c7ce4b (Fixed stupid OpenGL mistake in mesh)
 
     while (!glfwWindowShouldClose(state->window.window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

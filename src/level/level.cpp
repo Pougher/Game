@@ -35,13 +35,8 @@ void Level::render() {
             state->shaders["chunk"].set_vec2(
                 "chunk_pos",
                 glm::vec2(
-<<<<<<< HEAD
-                    i * CHUNK_SIZE_XZ,
-                    j * CHUNK_SIZE_XZ
-=======
                     i * CHUNK_SIZE_XZ/* + this->corner_x*/,
                     j * CHUNK_SIZE_XZ/* + this->corner_y*/
->>>>>>> 5c7ce4b (Fixed stupid OpenGL mistake in mesh)
                 )
             );
 
