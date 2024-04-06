@@ -16,7 +16,7 @@ GLEW_LIBS := $(shell pkg-config --libs glew)
 EXT_LIBS := -Iext/glm
 
 INC_FLAGS := $(EXT_LIBS) $(GLFW_INCLUDES) $(GLEW_INCLUDES)
-LDFLAGS = -lm $(GLEW_LIBS) $(GLFW_LIBS)
+LDFLAGS = -lm $(GLEW_LIBS) $(GLFW_LIBS) -fopenmp=libomp
 
 ifneq ($(OS),Windows_NT)
 	UNAME_S := $(shell uname -s)
@@ -32,17 +32,20 @@ else
 endif
 
 CPPFLAGS := \
-	$(INC_FLAGS) -MMD -MP -O3 -Wall -Wextra -Werror -pedantic -std=c++20 -march=native
+	$(INC_FLAGS) -MMD -MP -O3 -Wall -Wextra -Werror -pedantic -std=c++20 \
 
 $(TARGET): $(OBJS)
 	$(CXX) $(LDFLAGS) $(OBJS) -o $@ $(LDLIBS)
 
-.PHONY: clean, count, linux
+.PHONY: clean, count, linux, valgrind
 clean:
 	$(RM) $(TARGET) $(OBJS) $(DEPS)
 
 count:
 	tokei src/ --exclude "stb_image.h" --exclude "open_simplex_noise.hpp" --exclude "open_simplex_noise.cpp"
+
+valgrind:
+	valgrind ./main --suppressions=valgrind-check.txt
 
 print-%  : ; @echo $* = $($*)
 

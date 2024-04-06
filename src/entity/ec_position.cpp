@@ -11,8 +11,8 @@ void ECPosition::init(Entity *entity) {
 
 void ECPosition::update(Entity *entity) {
     (void) entity;
-    this->chunk_pos.x = floorf(this->position.z / CHUNK_SIZE_XZ);
-    this->chunk_pos.y = floorf(this->position.x / CHUNK_SIZE_XZ);
+    this->chunk_pos.x = floorf(this->position.x / CHUNK_SIZE_XZ);
+    this->chunk_pos.y = floorf(this->position.z / CHUNK_SIZE_XZ);
 }
 
 void ECPosition::tick(Entity *entity) { (void) entity; }

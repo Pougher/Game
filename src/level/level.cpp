@@ -35,8 +35,8 @@ void Level::render() {
             state->shaders["chunk"].set_vec2(
                 "chunk_pos",
                 glm::vec2(
-                    i * CHUNK_SIZE_XZ/* + this->corner_x*/,
-                    j * CHUNK_SIZE_XZ/* + this->corner_y*/
+                    i * CHUNK_SIZE_XZ + this->corner_x,
+                    j * CHUNK_SIZE_XZ + this->corner_y
                 )
             );
 
@@ -102,9 +102,9 @@ void Level::move(i64 x, i64 y) {
         for (u32 j = 0; j < this->view_distance; j++) {
             Chunk *c = old[j + i * this->view_distance];
             if (c->x >= this->corner_x && c->y >= this->corner_y &&
-                c->x <=
+                c->x <
                     (this->corner_x + this->view_distance * CHUNK_SIZE_XZ) &&
-                c->y <=
+                c->y <
                     (this->corner_y + this->view_distance * CHUNK_SIZE_XZ)) {
                 // chunk remains in bounds
                 u32 index_x = (c->x - this->corner_x) / CHUNK_SIZE_XZ;
@@ -132,6 +132,7 @@ void Level::move(i64 x, i64 y) {
 
     // fill in all of the deleted chunks with new chunks at the correct
     // coordinates
+    #pragma omp parallel for num_threads(4)
     for (u32 i = 0; i < this->view_distance; i++) {
         for (u32 j = 0; j < this->view_distance; j++) {
             if (this->loaded_chunks[i][j] == NULL) {
@@ -148,6 +149,7 @@ void Level::move(i64 x, i64 y) {
     }
 
     // mesh all of the chunks that require it
+    #pragma omp parallel for num_threads(4)
     for (const auto &c : mesh_update_chunks) {
         c->mesh();
     }

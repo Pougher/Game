@@ -41,20 +41,15 @@ void Generator::run(Chunk *chunk) {
             f64 noise_x = i + chunk->x;
             f64 noise_y = j + chunk->y;
 
-            heightmap[i][j] = this->noise_generator.eval(
-                noise_x / 32,
-                noise_y / 32
+            heightmap[i][j] = this->octave_noise(
+                noise_x,
+                noise_y,
+                0.9,
+                0.01,
+                4,
+                0.25,
+                2.0
             );
-
-            //heightmap[i][j] = this->octave_noise(
-            //    noise_x,
-            //    noise_y,
-            //    1,
-            //    0.01,
-            //    4,
-            //    0.5,
-            //    2.0
-            //);
         }
     }
 

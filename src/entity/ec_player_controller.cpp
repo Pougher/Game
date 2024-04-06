@@ -13,8 +13,14 @@ void ECPlayerController::tick(Entity *entity) {
     // if the player has moved chunks, move the world
     if (*(this->chunk_pos) != this->old_chunk_pos) {
         this->old_chunk_pos = *(this->chunk_pos);
-        //state->world.move(this->old_chunk_pos.x * 32, this->old_chunk_pos.y * 32);
-        //state->world.move(state->world.corner_x + 32, state->world.corner_y);
+
+        // center the player using an offset
+        const int offset = state->world.view_distance / 2;
+
+        state->world.move(
+            (this->old_chunk_pos.x - offset) * 32,
+            (this->old_chunk_pos.y - offset) * 32
+        );
     }
 
     const float speed = 0.2f;

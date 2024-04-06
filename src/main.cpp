@@ -56,7 +56,7 @@ int main() {
     rac::GridAtlas texture(std::string("atlas.png"), 16, 16, 16, 16);
 
     // frame per second timer, counts fps
-    int fps = 0;;
+    int fps = 0;
     Timer fps_timer(1.0f, [&fps]() {
         rlog::info("fps = " + std::to_string(fps));
         state->fps = fps;
@@ -85,8 +85,6 @@ int main() {
     glfwSetCursorPosCallback(state->window.window, mouse_callback);
     glfwSetInputMode(state->window.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    Timer t(0.05f, []{state->world.move(state->world.corner_x + CHUNK_SIZE_XZ, 0);});
-
     while (!glfwWindowShouldClose(state->window.window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -97,12 +95,10 @@ int main() {
         state->update();
 
         fps_timer.update();
-        t.update();
         fps++;
 
         if (glfwGetKey(state->window.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             break;
-        t.update();
     }
 
     state->cleanup();
