@@ -5,6 +5,7 @@
 #include "render/shader.hpp"
 #include "render/array_texture.hpp"
 #include "render/grid_atlas.hpp"
+#include "render/framebuffer.hpp"
 #include "level/chunk.hpp"
 #include "gfx/camera.hpp"
 
@@ -76,6 +77,8 @@ int main() {
     //model = glm::rotate(model, glm::radians(145.0f), glm::vec3(.0f, 1.0f, 0.0f));
     state->shaders["chunk"].set_mat4("model", model);
 
+    glfwSwapInterval(0);
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, texture.array_texture->id);
     glEnable(GL_DEPTH_TEST);
@@ -88,7 +91,6 @@ int main() {
     while (!glfwWindowShouldClose(state->window.window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         state->shaders["chunk"].set_mat4("view", cam->view_matrix());
         state->world.render();
 

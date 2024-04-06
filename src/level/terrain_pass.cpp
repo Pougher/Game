@@ -10,12 +10,12 @@ void TerrainPass::pass(Chunk *chunk, f64 **noise) {
             );
             for (u32 k = 0; k < y_value; k++) {
                 chunk->tiles[i][k][j].id = TileID::Dirt;
-            //    if (k < (0.8 * y_value))
-            //        chunk->tiles[i][k][j].id = TileID::Limestone;
+                if (k < (0.8 * y_value))
+                    chunk->tiles[i][k][j].id = TileID::Limestone;
             }
             chunk->tiles[i][y_value][j].id = TileID::Grass;
-            //if (y_value < 93)
-            //    chunk->tiles[i][y_value][j].id = TileID::Sand;
+            if (y_value < 20)
+                chunk->tiles[i][y_value][j].id = TileID::Sand;
         }
     }
 }
