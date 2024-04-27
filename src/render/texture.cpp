@@ -5,9 +5,14 @@
 
 using namespace rac;
 
-Texture::Texture() {}
+Texture::Texture() : format(GL_RGBA) {
+    this->initialize_default_parameters();
+}
 
-Texture::Texture(const std::string &filepath) {
+Texture::Texture(const std::string &filepath) :
+    format(GL_RGBA) {
+    this->initialize_default_parameters();
+
     // flip the image so that the image doesn't appear upside down
     stbi_set_flip_vertically_on_load(1);
 
@@ -36,14 +41,14 @@ Texture::Texture(const std::string &filepath) {
 #endif
 }
 
-Texture::Texture(i32 w, i32 h) {
-    // create an empty data array that is completely black
-    unsigned char *data = new unsigned char[w * h * 4];
+Texture::Texture(i32 w, i32 h, i32 channels) :
+    width(w),
+    height(h),
+    channels(channels) {
+    this->initialize_default_parameters();
 
-    // set up variables for the texture
-    this->width = w;
-    this->height = h;
-    this->channels = 4;
+    // create an empty data array that is completely black
+    unsigned char *data = new unsigned char[w * h * this->channels];
 
     // create the empty texture
     this->create_texture_from_data(data);
@@ -51,42 +56,74 @@ Texture::Texture(i32 w, i32 h) {
     free(data);
 }
 
+Texture::Texture(i32 w, i32 h, i32 channels, GLenum format) :
+    width(w),
+    height(h),
+    channels(channels),
+    format(format) {
+    this->initialize_default_parameters();
+
+    // create an empty data array that is completely black
+    const size_t buffer_size = w * h * this->channels;
+    unsigned char *data = new unsigned char[buffer_size];
+
+    // memset all data to zero
+    memset(data, 0, buffer_size);
+
+    // create the empty texture
+    this->create_texture_from_data(data);
+
+    delete[] data;
+}
+
 void Texture::create_texture_from_data(unsigned char *data) {
     // generate the texture
     glGenTextures(1, &this->id);
     glBindTexture(GL_TEXTURE_2D, this->id);
 
-    // set the texture attributes
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // set the texture attributes from the texture paramters list
+    for (auto &parameter : this->texture_parameters) {
+        glTexParameteri(GL_TEXTURE_2D, parameter.first, parameter.second);
+    }
 
     // set the pixel alignment
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    // get the GL pixel format for the texture
-    GLenum format = this->to_gl_format();
 
     // now that the texture is bound, we can start to generate it from the
     // loaded image data
     glTexImage2D(
         GL_TEXTURE_2D,
         0,
-        GL_RGBA,
+        this->format,
         this->width,
         this->height,
         0,
-        format,
+        this->format,
         GL_UNSIGNED_BYTE,
         data
     );
 }
 
-GLenum Texture::to_gl_format() {
-    if (this->channels == 3) return GL_RGB;
-    return GL_RGBA;
+void Texture::set_parameters(
+    const std::vector<std::pair<GLenum, GLenum>> &params) {
+    this->texture_parameters.clear();
+    this->texture_parameters = params;
+}
+
+void Texture::set_additional_parameters(
+    const std::vector<std::pair<GLenum, GLenum>> &params) {
+    this->texture_parameters.insert(
+        this->texture_parameters.end(),
+        params.begin(),
+        params.end()
+    );
+}
+
+void Texture::initialize_default_parameters() {
+    this->texture_parameters.push_back({ GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE });
+    this->texture_parameters.push_back({ GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE });
+    this->texture_parameters.push_back({ GL_TEXTURE_MIN_FILTER, GL_NEAREST });
+    this->texture_parameters.push_back({ GL_TEXTURE_MAG_FILTER, GL_NEAREST });
 }
 
 void Texture::destroy() {

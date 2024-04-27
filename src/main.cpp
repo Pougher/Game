@@ -67,8 +67,8 @@ int main() {
 
     state->shaders["chunk"].set_mat4("projection",
        glm::perspective(glm::radians(90.0f), 1280.0f / 720.0f, 0.1f, 10000.0f));
-    //state->shaders["chunk"].set_mat4("projection",
-    //    glm::ortho(8 * -(1280.0f / 720.0f), 8 * (1280.0f / 720.0f), -8.0f,8.0f, 0.1f, 10000.0f));
+   // state->shaders["chunk"].set_mat4("projection",
+   //     glm::ortho(8 * -(1280.0f / 720.0f), 8 * (1280.0f / 720.0f), -8.0f,8.0f, 0.1f, 10000.0f));
     state->shaders["chunk"].set_int("tex", 0);
 
     // get stuff into isometric view
@@ -76,8 +76,6 @@ int main() {
     //model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     //model = glm::rotate(model, glm::radians(145.0f), glm::vec3(.0f, 1.0f, 0.0f));
     state->shaders["chunk"].set_mat4("model", model);
-
-    glfwSwapInterval(0);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, texture.array_texture->id);
@@ -87,6 +85,8 @@ int main() {
 
     glfwSetCursorPosCallback(state->window.window, mouse_callback);
     glfwSetInputMode(state->window.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    glfwSwapInterval(0);
 
     while (!glfwWindowShouldClose(state->window.window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

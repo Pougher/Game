@@ -34,8 +34,8 @@ struct Framebuffer {
     // specified format)
     void add_renderbuffer(GLenum, GLenum);
 
-    // attaches a texture to the provided colour attachment number
-    void add_texture(GLenum);
+    // attaches a texture to the provided attachment number
+    void add_texture(GLenum, const rac::Texture&);
 
     // binds the framebuffer to the default GL_FRAMEBUFFER
     void bind();

@@ -26,7 +26,7 @@ ArrayTexture::ArrayTexture(
         width,
         height,
         depth,
-        Texture::to_gl_format(),
+        this->format,
         data
     );
 }

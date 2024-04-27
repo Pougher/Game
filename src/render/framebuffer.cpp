@@ -33,8 +33,7 @@ void Framebuffer::add_renderbuffer(GLenum format, GLenum attachment) {
     this->render_buffer_id = rbo;
 }
 
-void Framebuffer::add_texture(GLenum attachment) {
-    rac::Texture texture = rac::Texture(this->width, this->height);
+void Framebuffer::add_texture(GLenum attachment, const rac::Texture &texture) {
     this->textures[attachment] = texture;
 
     // attach the texture to the framebuffer
