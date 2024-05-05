@@ -3,10 +3,10 @@
 
 using namespace level;
 
-Level::Level(u32 vd, const std::vector<GeneratorPass*> &passes)
-    : corner_x(0),
-      corner_y(0),
-      view_distance(vd) {
+Level::Level(u32 vd, const std::vector<GeneratorPass*> &passes) :
+    corner_x(0),
+    corner_y(0),
+    view_distance(vd) {
     this->init_chunks();
     this->level_generator.set_passes(passes);
 }
@@ -15,6 +15,18 @@ Level::Level(u32 vd) : corner_x(0),
                        corner_y(0),
                        view_distance(vd) {
     this->init_chunks();
+}
+
+Level::Level() {
+    this->corner_x = 0;
+    this->corner_y = 0;
+}
+
+void Level::init(u32 vd) {
+    this->view_distance = vd;
+
+    this->init_chunks();
+    this->shadowmap.init(1024, 1024);
 }
 
 void Level::init_chunks() {
@@ -30,6 +42,25 @@ void Level::init_chunks() {
 }
 
 void Level::render() {
+    // first, render to the shadow map
+    this->shadowmap.start_shadow_render();
+    for (u32 i = 0; i < this->view_distance; i++) {
+        for (u32 j = 0; j < this->view_distance; j++) {
+            this->shadowmap.depth_shader->set_vec2(
+                "chunk_pos",
+                glm::vec2(
+                    i * CHUNK_SIZE_XZ + this->corner_x,
+                    j * CHUNK_SIZE_XZ + this->corner_y
+                )
+            );
+
+            this->loaded_chunks[i][j]->render();
+        }
+    }
+    this->shadowmap.end_shadow_render();
+
+    // then, render to the default framebuffer
+    state->shaders["chunk"].use();
     for (u32 i = 0; i < this->view_distance; i++) {
         for (u32 j = 0; j < this->view_distance; j++) {
             state->shaders["chunk"].set_vec2(
@@ -188,4 +219,6 @@ void Level::destroy() {
     for (const auto &pass : this->level_generator.passes) {
         delete pass;
     }
+
+    this->shadowmap.destroy();
 }

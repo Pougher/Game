@@ -13,7 +13,7 @@ GLFW_LIBS := $(shell pkg-config --libs glfw3)
 GLEW_INCLUDES := $(shell pkg-config --cflags glew)
 GLEW_LIBS := $(shell pkg-config --libs glew)
 
-EXT_LIBS := -Iext/glm
+EXT_LIBS := -Iext/glm -Iext/toml11
 
 INC_FLAGS := $(EXT_LIBS) $(GLFW_INCLUDES) $(GLEW_INCLUDES)
 LDFLAGS = -lm $(GLEW_LIBS) $(GLFW_LIBS) -fopenmp=libomp

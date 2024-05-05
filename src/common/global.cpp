@@ -3,26 +3,23 @@
 // set state equal to null so we can initialize it later
 Global *state = NULL;
 
-Global::Global() : world(8) {
+Global::Global() {
     rlog::info("Instantiated global state object");
+}
+
+void Global::init() {
+    rlog::info("Initializing global state object...");
 
     // create the window
-    this->window.create("DEV-0g-13_02_2024", 1280, 720);
+    this->window.create("DEV-11h-27_04_2024", 1280, 720);
     rlog::info("Created 1280x720 window");
 
     // add the default rendering shaders
-    this->add_shaders(
-        {
-            "default",
-            "chunk"
-        },
-        {
-            "shaders/default_vs.glsl",
-            "shaders/default_fs.glsl",
-            "shaders/chunk_vs.glsl",
-            "shaders/chunk_fs.glsl"
-        }
-    );
+    this->load_shaders();
+
+    // create the world instance
+    rlog::info("Creating LEVEL 0...");
+    this->world.init(8);
 
     // create the player entity
     this->player = this->ec_manager.instantiate_entity({
@@ -59,9 +56,41 @@ void Global::add_shaders(
 
     // load the shaders
     for (size_t i = 0; i < files.size(); i += 2) {
-        this->shaders[
-            names[i / 2]] =
-            rac::Shader(files[i], files[i + 1], true);
+        const std::string &name = names[i / 2];
+
+        // if the shader is already registered, don't register it again
+        if (this->shaders.find(name) == this->shaders.end()) {
+            this->shaders[name] = rac::Shader(files[i], files[i + 1], true);
+        }
+    }
+}
+
+void Global::load_shaders() {
+    try {
+        // load the TOML source
+        const auto shader_list = toml::parse("shaders/shaders.toml");
+
+        std::vector<std::string> names;
+        std::vector<std::string> filenames;
+
+        for (const auto &[key, value] : shader_list.as_table()) {
+            const auto &table = toml::find(shader_list, key);
+
+            // load the vertex and fragment shader filenames from the shader
+            // table
+            const auto &vertex = toml::find<std::string>(table, "vertex");
+            const auto &fragment = toml::find<std::string>(table, "fragment");
+
+            names.push_back(key);
+            filenames.push_back(vertex);
+            filenames.push_back(fragment);
+        }
+
+        // finally, load all of the shaders at once
+        this->add_shaders(names, filenames);
+    } catch (std::exception &e) {
+        rlog::error("Error when attempting to load shader configs:");
+        std::cerr << "    " << e.what() << std::endl;
     }
 }
 

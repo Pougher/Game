@@ -62,17 +62,21 @@ Texture::Texture(i32 w, i32 h, i32 channels, GLenum format) :
     channels(channels),
     format(format) {
     this->initialize_default_parameters();
+    this->zero();
+}
 
-    // create an empty data array that is completely black
-    const size_t buffer_size = w * h * this->channels;
+void Texture::zero() {
+    const size_t buffer_size =
+        this->width * this->height * this->channels * sizeof(unsigned char);
     unsigned char *data = new unsigned char[buffer_size];
 
-    // memset all data to zero
+    // set all the data in the buffer to 0
     memset(data, 0, buffer_size);
 
-    // create the empty texture
+    // create a texture from the data
     this->create_texture_from_data(data);
 
+    // free the allocated memory
     delete[] data;
 }
 
@@ -99,8 +103,8 @@ void Texture::create_texture_from_data(unsigned char *data) {
         this->height,
         0,
         this->format,
-        GL_UNSIGNED_BYTE,
-        data
+        this->internal_format,
+        this->has_data ? data : NULL
     );
 }
 

@@ -52,6 +52,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
 int main() {
     state = new Global;
+    state->init();
+
     state->world.mesh();
 
     rac::GridAtlas texture(std::string("atlas.png"), 16, 16, 16, 16);
@@ -65,8 +67,9 @@ int main() {
     });
     state->shaders["chunk"].use();
 
-    state->shaders["chunk"].set_mat4("projection",
-       glm::perspective(glm::radians(90.0f), 1280.0f / 720.0f, 0.1f, 10000.0f));
+    glm::mat4 projection =
+        glm::perspective(glm::radians(90.0f), 1280.0f / 720.0f, 0.1f, 10000.0f);
+    state->shaders["chunk"].set_mat4("projection", projection);
    // state->shaders["chunk"].set_mat4("projection",
    //     glm::ortho(8 * -(1280.0f / 720.0f), 8 * (1280.0f / 720.0f), -8.0f,8.0f, 0.1f, 10000.0f));
     state->shaders["chunk"].set_int("tex", 0);
@@ -86,13 +89,46 @@ int main() {
     glfwSetCursorPosCallback(state->window.window, mouse_callback);
     glfwSetInputMode(state->window.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    glfwSwapInterval(0);
+
+    // test shadowmap
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(
+    //    GL_TEXTURE_2D, state->world.shadowmap.depth_map.textures[GL_DEPTH_ATTACHMENT].id
+    //);
+    state->shaders["default"].set_int("depthmap", 0);
+
+    rac::Mesh quad_mesh;
+    quad_mesh.attribute(rac::Mesh::MeshAttribute {
+        .type = GL_FLOAT,
+        .length = 3,
+        .size = 3 * sizeof(float),
+        .index = quad_mesh.last()
+    });
+    quad_mesh.attribute(rac::Mesh::MeshAttribute {
+        .type = GL_FLOAT,
+        .length = 2,
+        .size = 2 * sizeof(float),
+        .index = quad_mesh.last()
+    });
+    quad_mesh.push<float>({
+        1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f, 0.0f, 1.0f
+    }, 6);
+    quad_mesh.build();
 
     while (!glfwWindowShouldClose(state->window.window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        state->shaders["chunk"].use();
         state->shaders["chunk"].set_mat4("view", cam->view_matrix());
         state->world.render();
+
+        state->shaders["default"].use();
+        quad_mesh.render();
 
         state->update();
 

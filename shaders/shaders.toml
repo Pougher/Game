@@ -1,0 +1,11 @@
+[default]
+vertex = "shaders/default_vs.glsl"
+fragment = "shaders/default_fs.glsl"
+
+[chunk]
+vertex = "shaders/chunk_vs.glsl"
+fragment = "shaders/chunk_fs.glsl"
+
+[gfx_depth_buffer]
+vertex = "shaders/depth_shader_vs.glsl"
+fragment = "shaders/depth_shader_fs.glsl"

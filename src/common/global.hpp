@@ -3,6 +3,8 @@
 #include <string>
 #include <cassert>
 
+#include <toml.hpp>
+
 #include "log.hpp"
 #include "timer.hpp"
 
@@ -48,8 +50,11 @@ struct Global {
     // current fps that the game is operating at
     i32 fps;
 
-    // initializes all object in the global state
+    // creates the global object
     Global();
+
+    // initializes all members of the global state object
+    void init();
 
     // loads shaders to the global state where every even numbered string is
     // a vertex shader position, and each odd numbered string is a fragment
@@ -58,6 +63,9 @@ struct Global {
         const std::vector<std::string>&,
         const std::vector<std::string>&
     );
+
+    // loads all shaders in 'shaders/shaders.toml'
+    void load_shaders();
 
     // runs update methods on a per frame basis for all components of the
     // global state

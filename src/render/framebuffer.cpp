@@ -2,10 +2,15 @@
 
 using namespace rac;
 
+Framebuffer::Framebuffer() : render_buffer_id(std::nullopt) {}
+
 Framebuffer::Framebuffer(u32 width, u32 height) :
     render_buffer_id(std::nullopt),
     width(width),
     height(height) {
+}
+
+void Framebuffer::generate() {
     glGenFramebuffers(1, &this->id);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

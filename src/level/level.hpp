@@ -7,6 +7,8 @@
 
 #include "../common/types.hpp"
 
+#include "../gfx/shadowmap.hpp"
+
 #include "chunk.hpp"
 #include "generator.hpp"
 #include "generator_pass.hpp"
@@ -16,6 +18,9 @@ namespace level {
 struct Level {
     // responsible for providing generation to the chunks
     Generator level_generator;
+
+    // shadowmap to render world shadows with
+    gfx::Shadowmap shadowmap;
 
     // a 2D array of the currently loaded chunk pointers
     Chunk ***loaded_chunks;
@@ -32,6 +37,12 @@ struct Level {
 
     // constructor that just sets the view distance
     Level(u32);
+
+    // default constructor that does nothing
+    Level();
+
+    // initializes the level struct if a constructor has not been called
+    void init(u32);
 
     // initializes the chunk array to empty chunks with their x and y parameters
     // filled

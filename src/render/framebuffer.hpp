@@ -13,22 +13,27 @@
 namespace rac {
 
 struct Framebuffer {
-    // ID of the framebuffer object itself
-    unsigned int id;
-
     // ID of the renderbuffer object (if there is one)
     std::optional<unsigned int> render_buffer_id;
 
     // currently bound textures
     std::unordered_map<GLenum, rac::Texture> textures;
 
+    // ID of the framebuffer object itself
+    unsigned int id;
+
     // dimensions of the framebuffer
     u32 width;
     u32 height;
 
-    // constructor which simply sets the dimensions of the framebuffer, and
-    // generates a framebuffer object
+    // constructor which simply sets the dimensions of the framebuffer
     Framebuffer(u32, u32);
+
+    // default constructor that does nothing
+    Framebuffer();
+
+    // generates the framebuffer object directly
+    void generate();
 
     // creates a renderbuffer and attaches it to the framebuffer (with the
     // specified format)

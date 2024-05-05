@@ -14,6 +14,9 @@
 namespace rac {
 
 struct Texture {
+    // list of texture parameters that are used in texture creation
+    std::vector<std::pair<GLenum, GLenum>> texture_parameters;
+
     // the width and height of the texture (dimensions)
     i32 width, height;
 
@@ -26,8 +29,14 @@ struct Texture {
     // default format is GL_RGBA
     GLenum format;
 
-    // list of texture parameters that are used in texture creation
-    std::vector<std::pair<GLenum, GLenum>> texture_parameters;
+    // tells OpenGL what internal format to use for the texture. Default value
+    // is GL_UNSIGNED_BYTE
+    GLenum internal_format = GL_UNSIGNED_BYTE;
+
+    // informs OpenGL if the texture being created has any data attached to it.
+    // If this value is true, then the provided data will be used to instantiate
+    // the texture. Otherwise, NULL is used
+    bool has_data = true;
 
     // loads an image at the filepath specified in the std::string and
     // generates a texture from it
@@ -46,6 +55,9 @@ struct Texture {
     // creates a texture from a set of data, using the internal width, height
     // and channels values
     void create_texture_from_data(unsigned char*);
+
+    // creates a texture that consists of 0 bytes
+    void zero();
 
     // initializes the default texture parameters
     void initialize_default_parameters();
